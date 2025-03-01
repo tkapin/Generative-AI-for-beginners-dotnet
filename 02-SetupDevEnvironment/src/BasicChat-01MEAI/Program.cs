@@ -1,12 +1,19 @@
-﻿using Azure;
-using Azure.AI.Inference;
+﻿using System.ClientModel;
+using Azure.AI.OpenAI;
 using Microsoft.Extensions.AI;
 
-IChatClient client = new ChatCompletionsClient(
-        endpoint: new Uri("https://models.inference.ai.azure.com"),
-        new AzureKeyCredential(Environment.GetEnvironmentVariable("GITHUB_TOKEN") ?? throw new InvalidOperationException("Missing GITHUB_TOKEN environment variable. Ensure you followed the instructions to setup a GitHub Token to use GitHub Models.")))
-        .AsChatClient("Phi-3.5-MoE-instruct");
+using Azure;
+using Azure.AI.Inference;
 
-var response = await client.GetResponseAsync("What is AI?");
+var deploymentName = "o3-mini"; // e.g. "gpt-4o-mini"
+var endpoint = new Uri("https://tokapin-openai-01.openai.azure.com/"); // e.g. "https://< your hub name >.openai.azure.com/"
+var apiKey = new ApiKeyCredential(Environment.GetEnvironmentVariable("AZURE_AI_KEY"));
+
+IChatClient client = new AzureOpenAIClient(
+    endpoint,
+    apiKey)
+.AsChatClient(deploymentName);
+
+var response = await client.GetResponseAsync("Tell me a joke about a frog");
 
 Console.WriteLine(response.Message);
