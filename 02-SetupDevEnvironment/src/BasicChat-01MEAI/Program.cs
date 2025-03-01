@@ -7,7 +7,7 @@ using Azure.AI.Inference;
 
 var deploymentName = "o3-mini"; // e.g. "gpt-4o-mini"
 var endpoint = new Uri("https://tokapin-openai-01.openai.azure.com/"); // e.g. "https://< your hub name >.openai.azure.com/"
-var apiKey = new ApiKeyCredential(Environment.GetEnvironmentVariable("AZURE_AI_KEY"));
+var apiKey = new ApiKeyCredential(Environment.GetEnvironmentVariable("AZURE_AI_KEY") ?? throw new InvalidOperationException("The environment variable 'AZURE_AI_KEY' is not set."));
 
 IChatClient client = new AzureOpenAIClient(
     endpoint,
